@@ -3136,6 +3136,79 @@ impl ClientboundHeldItemChange {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct UpdateViewPosition {
+    chunk_x: i32,
+    chunk_z: i32,
+}
+
+impl UpdateViewPosition {
+    const PACKET_ID: i32 = 64;
+    /// Deserializes a Read type into a packet. You usually won't need to use this.
+    pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
+        Ok(ClientboundPacket::UpdateViewPosition(UpdateViewPosition {
+            chunk_x: read_varint(r)?,
+            chunk_z: read_varint(r)?,
+
+        }))
+    }
+    /// Serializes the packet into Vec<u8>. You usually won't need to use this.
+    pub fn to_u8(&self) -> Result<Vec<u8>> {
+        let mut ret = Vec::new();
+        write_varint(&Self::PACKET_ID, &mut ret)?;
+        write_varint(&self.chunk_x, &mut ret)?;
+        write_varint(&self.chunk_z, &mut ret)?;
+
+        Ok(ret)
+    }
+    pub fn new(chunk_x: i32, chunk_z: i32) -> ClientboundPacket {
+        ClientboundPacket::UpdateViewPosition(UpdateViewPosition {
+            chunk_x: chunk_x,
+            chunk_z: chunk_z,
+        })
+    }
+    /// Get the chunk X coordinate of the player's position
+    pub fn get_chunk_x(&self) -> &i32 {
+        &self.chunk_x
+    }    /// Get the chunk Z coordinate of the player's position
+    pub fn get_chunk_z(&self) -> &i32 {
+        &self.chunk_z
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct UpdateViewDistance {
+    view_distance: i32,
+}
+
+impl UpdateViewDistance {
+    const PACKET_ID: i32 = 65;
+    /// Deserializes a Read type into a packet. You usually won't need to use this.
+    pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
+        Ok(ClientboundPacket::UpdateViewDistance(UpdateViewDistance {
+            view_distance: read_varint(r)?,
+
+        }))
+    }
+    /// Serializes the packet into Vec<u8>. You usually won't need to use this.
+    pub fn to_u8(&self) -> Result<Vec<u8>> {
+        let mut ret = Vec::new();
+        write_varint(&Self::PACKET_ID, &mut ret)?;
+        write_varint(&self.view_distance, &mut ret)?;
+
+        Ok(ret)
+    }
+    pub fn new(view_distance: i32) -> ClientboundPacket {
+        ClientboundPacket::UpdateViewDistance(UpdateViewDistance {
+            view_distance: view_distance,
+        })
+    }
+    /// Get the render distance
+    pub fn get_view_distance(&self) -> &i32 {
+        &self.view_distance
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct DisplayScoreboard {
     position: u8,
     name: String,

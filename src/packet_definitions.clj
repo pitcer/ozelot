@@ -619,6 +619,13 @@
 {:name "ClientboundHeldItemChange"
  :id 63
  :fields [{:name "slot" :type "u8" :getter "Get the slot number which the player has selected"}]}
+{:name "UpdateViewPosition"
+ :id 64
+ :fields [{:name "chunk_x" :type "i32" :getter "Get the chunk X coordinate of the player's position" :read "varint"}
+					{:name "chunk_z" :type "i32" :getter "Get the chunk Z coordinate of the player's position" :read "varint"}]}
+{:name "UpdateViewDistance"
+ :id 65
+ :fields [{:name "view_distance" :type "i32" :getter "Get the render distance" :read "varint"}]}
 {:name "DisplayScoreboard"
  :id 66
  :fields [{:name "position" :type "u8" :getter "Get the raw integer representing the scoreboard's position"}
