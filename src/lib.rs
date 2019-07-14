@@ -128,7 +128,7 @@ pub mod write;
 mod tests;
 
 /// The protocol version supported by this version of ozelot
-pub const PROTOCOL_VERSION: i32 = 404;
+pub const PROTOCOL_VERSION: i32 = 490;
 
 /// This tracks which state of play the client is in. The value of this changes
 /// the meaning of the different packet ids.
