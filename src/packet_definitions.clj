@@ -403,7 +403,7 @@
           {:name "number_of_slots" :type "u8" :getter "Get the number of slots in the window"}
           {:name "entity_id" :type "Option<i32>" :getter "Get the entity ID if the window type is `EntityHorse`, else `None`"}]}
 {:name "WindowItems"
- :id 21
+ :id 46
  :fields [{:name "window_id" :type "u8" :getter "Get the window ID"}
           {:name "slots" :type "Vec<u8>" :getter "Get the remaining slot data, that is the last two fields described at http://wiki.vg/Protocol#Window_Items" :read "bytearray_to_end"}]}
 {:name "WindowProperty"
@@ -494,9 +494,9 @@
  :fields [{:name "entity_id" :type "i32" :getter "Get the player's entity ID"}
           {:name "gamemode" :type "u8" :getter "Get the player's gamemode"}
           {:name "dimension" :type "i32" :getter "Get the dimension the player is in. Not the specific world (in case of servers with multiworld), but the kind of world"}
-          {:name "difficulty" :type "u8" :getter "Get the difficulty"}
           {:name "max_players" :type "u8"}; Apparently this field is no longer used but for some reason hasn't been removed yet
           {:name "level_type" :type "String" :getter "Get the level type of the world the player joined in"}
+					{:name "view_distance" :type "i32" :getter "Get the server's render distance" :read "varint"}
           {:name "reduced_debug" :type "bool" :getter "Get whether to show reduced debug info"}]}
 {:name "Map"
  :id 38
@@ -543,7 +543,7 @@
           ]
  }
 {:name "PlayerAbilities"
- :id 46
+ :id 49
  :fields [{:name "flags" :type "u8"}
           {:name "flying_speed" :type "f32" :getter "Get the player's allowed flying speed"}
           {:name "fov" :type "f32" :getter "Get the player's field of view modifier"}]}
@@ -558,7 +558,7 @@
  :id 48
  :fields [{:name "data" :type "Vec<u8>" :getter "Get the raw data from this packet. This library does not attempt to parse this packet." :read "bytearray_to_end"}]}
 {:name "FacePlayer"
- :id 49
+ :id 52
  :automatic-serialize false
  :fields [{:name "feet_or_eyes" :type "i32" :getter "Get whether feet or eyes (enum)"}
           {:name "x" :type "f64" :getter "Get the X coordinate of the point to face"}
@@ -580,7 +580,7 @@
  :fields [{:name "entity_id" :type "i32" :getter "Get the entity ID of the player sleeping" :read "varint"}
           {:name "position" :type "(i32, i32, i32)" :getter "Get the (x, y, z) position" :read "position"}]}
 {:name "UnlockRecipes"
- :id 52
+ :id 54
  :automatic-serialize false
  :fields [{:name "action" :type "i32" :getter "Get the action enum ID"}
           {:name "crafting_book_open" :type "bool" :getter "Get whether the crafting book shall open when the player opens their inventory"}
@@ -593,7 +593,7 @@
  :id 53
  :fields [{:name "entity_ids" :type "Vec<i32>" :getter "Get the list of entity IDs that have been destroyed" :read "prefixed_varintarray"}]}
 {:name "RemoveEntityEffect"
- :id 54
+ :id 56
  :fields [{:name "entity_id" :type "i32" :getter "Get the entity ID to remove the effect from" :read "varint"}
           {:name "effect_id" :type "u8" :getter "Get the effect ID (enum)"}]}
 {:name "ResourcePackSend"
@@ -601,7 +601,7 @@
  :fields [{:name "url" :type "String" :getter "Get the URL to the resource pack"}
           {:name "hash" :type "String" :getter "Get the expected SHA-1 hash of the resource pack"}]}
 {:name "Respawn"
- :id 56
+ :id 58
  :fields  [{:name "dimension" :type "i32" :getter "Get the integer value for the dimension the player is spawning in"}
            {:name "difficulty" :type "u8" :getter "Get the integer value for the difficulty"}
            {:name "gamemode" :type "u8" :getter "Get the integer value for the gamemode"}
@@ -611,20 +611,20 @@
  :fields [{:name "entity_id" :type "i32" :getter "Get the entity ID" :read "varint"}
           {:name "head_yaw" :type "i8" :getter "Get the new head yaw"}]}
 {:name "SelectAdvancementTab"
- :id 58
+ :id 60
  :automatic-serialize false
  :fields [{:name "identifier" :type "Option<String>" :getter "Get the identifier to switch to. If None, switch to default"}]}
 {:name "WorldBorder"
  :id 59
  :fields [{:name "data" :type "Vec<u8>" :getter "Get this packet's raw data. This library does not attempt to parse this packet" :read "bytearray_to_end"}]}
 {:name "Camera"
- :id 60
+ :id 62
  :fields [{:name "entity_id" :type "i32" :getter "Get the entity ID to set the camera to" :read "varint"}]}
 {:name "ClientboundHeldItemChange"
  :id 61
  :fields [{:name "slot" :type "u8" :getter "Get the slot number which the player has selected"}]}
 {:name "DisplayScoreboard"
- :id 62
+ :id 66
  :fields [{:name "position" :type "u8" :getter "Get the raw integer representing the scoreboard's position"}
           {:name "name" :type "String" :getter "Get the name of the scoreboard"}]}
 {:name "EntityMetadata"
@@ -642,7 +642,7 @@
           {:name "y_velocity" :type "i16" :getter "Get the Y velocity"}
           {:name "z_velocity" :type "i16" :getter "Get the Z velocity"}]}
 {:name "EntityEquipment"
- :id 66
+ :id 70
  :fields [{:name "entity_id" :type "i32" :getter "Get the entity ID" :read "varint"}
           {:name "slot_enum" :type "i32" :getter "Get the raw slot identification number" :read "varint"}
           {:name "slot_data" :type "Vec<u8>" :getter "Get the raw slot data. This library does not attempt to parse it" :read "bytearray_to_end"}]}
@@ -664,7 +664,7 @@
           {:name "value" :type "Option<String>" :getter "Get the text to be displayed"}
           {:name "objective_type" :type "Option<String>" :getter "Get the raw string representing the type (`integer` or `hearts`)"}]}
 {:name "SetPassengers"
- :id 70
+ :id 74
  :fields [{:name "entity_id" :type "i32" :getter "Get the entity ID" :read "varint"}
           {:name "passengers" :type "Vec<i32>" :getter "Get the vec of all the passengers" :read "prefixed_varintarray"}]}
 {:name "Teams"
@@ -681,7 +681,7 @@
  :id 73
  :fields [{:name "position" :type "(i32, i32, i32)" :getter "Get the position" :read "position"}]}
 {:name "TimeUpdate"
- :id 74
+ :id 78
  :fields [{:name "world_age" :type "i64" :getter "Get the world's age in ticks"}
           {:name "time_of_day" :type "i64" :getter "Get the current time in ticks (0 is sunrise, 6000 is noon, ...)"}]}
 {:name "Title"
@@ -706,7 +706,7 @@
           {:name "volume" :type "f32" :getter "Get the volume where 1.0 is 100%"}
           {:name "pitch" :type "f32" :getter "Get the pitch"}]}
 {:name "PlayerListHeaderFooter"
- :id 78
+ :id 83
  :fields [{:name "header" :type "String" :getter "Get the raw json data for the header"}
           {:name "footer" :type "String" :getter "Get the raw json data for the footer"}]}
 {:name "CollectItem"
@@ -731,7 +731,7 @@
  :fields [{:name "entity_id" :type "i32" :getter "Get the entity ID" :read "varint"}
           {:name "data" :type "Vec<u8>" :getter "Get the raw data for this packet. This library does not attempt to parse the packet" :read "bytearray_to_end"}]}
 {:name "EntityEffect"
- :id 83
+ :id 89
  :fields [{:name "entity_id" :type "i32" :getter "Get the entity ID" :read "varint"}
           {:name "effect_id" :type "u8" :getter "Get the raw effect ID integer enum"}
           {:name "amplifier" :type "i8" :getter "Get the amplifier = effect level - 1"}

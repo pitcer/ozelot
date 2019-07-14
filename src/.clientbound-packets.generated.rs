@@ -1339,7 +1339,7 @@ pub struct WindowItems {
 }
 
 impl WindowItems {
-    const PACKET_ID: i32 = 21;
+    const PACKET_ID: i32 = 46;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::WindowItems(WindowItems {
@@ -2064,9 +2064,9 @@ pub struct JoinGame {
     entity_id: i32,
     gamemode: u8,
     dimension: i32,
-    difficulty: u8,
     max_players: u8,
     level_type: String,
+    view_distance: i32,
     reduced_debug: bool,
 }
 
@@ -2078,9 +2078,9 @@ impl JoinGame {
             entity_id: read_i32(r)?,
             gamemode: read_u8(r)?,
             dimension: read_i32(r)?,
-            difficulty: read_u8(r)?,
             max_players: read_u8(r)?,
             level_type: read_String(r)?,
+            view_distance: read_varint(r)?,
             reduced_debug: read_bool(r)?,
 
         }))
@@ -2092,21 +2092,21 @@ impl JoinGame {
         write_i32(&self.entity_id, &mut ret)?;
         write_u8(&self.gamemode, &mut ret)?;
         write_i32(&self.dimension, &mut ret)?;
-        write_u8(&self.difficulty, &mut ret)?;
         write_u8(&self.max_players, &mut ret)?;
         write_String(&self.level_type, &mut ret)?;
+        write_varint(&self.view_distance, &mut ret)?;
         write_bool(&self.reduced_debug, &mut ret)?;
 
         Ok(ret)
     }
-    pub fn new(entity_id: i32, gamemode: u8, dimension: i32, difficulty: u8, max_players: u8, level_type: String, reduced_debug: bool) -> ClientboundPacket {
+    pub fn new(entity_id: i32, gamemode: u8, dimension: i32, max_players: u8, level_type: String, view_distance: i32, reduced_debug: bool) -> ClientboundPacket {
         ClientboundPacket::JoinGame(JoinGame {
             entity_id: entity_id,
             gamemode: gamemode,
             dimension: dimension,
-            difficulty: difficulty,
             max_players: max_players,
             level_type: level_type,
+            view_distance: view_distance,
             reduced_debug: reduced_debug,
         })
     }
@@ -2119,15 +2119,15 @@ impl JoinGame {
     }    /// Get the dimension the player is in. Not the specific world (in case of servers with multiworld), but the kind of world
     pub fn get_dimension(&self) -> &i32 {
         &self.dimension
-    }    /// Get the difficulty
-    pub fn get_difficulty(&self) -> &u8 {
-        &self.difficulty
     }    /// get the max_players field (UNDOCUMENTED)
     pub fn get_max_players(&self) -> &u8 {
         &self.max_players
     }    /// Get the level type of the world the player joined in
     pub fn get_level_type(&self) -> &String {
         &self.level_type
+    }    /// Get the server's render distance
+    pub fn get_view_distance(&self) -> &i32 {
+        &self.view_distance
     }    /// Get whether to show reduced debug info
     pub fn get_reduced_debug(&self) -> &bool {
         &self.reduced_debug
@@ -2532,7 +2532,7 @@ pub struct PlayerAbilities {
 }
 
 impl PlayerAbilities {
-    const PACKET_ID: i32 = 46;
+    const PACKET_ID: i32 = 49;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::PlayerAbilities(PlayerAbilities {
@@ -2650,7 +2650,7 @@ pub struct FacePlayer {
 }
 
 impl FacePlayer {
-    const PACKET_ID: i32 = 49;
+    const PACKET_ID: i32 = 52;
 
 
     pub fn new_raw(feet_or_eyes: i32, x: f64, y: f64, z: f64, entity_id: Option<i32>, entity_feet_or_eyes: Option<i32>) -> ClientboundPacket {
@@ -2811,7 +2811,7 @@ pub struct UnlockRecipes {
 }
 
 impl UnlockRecipes {
-    const PACKET_ID: i32 = 52;
+    const PACKET_ID: i32 = 54;
 
 
     pub fn new_raw(action: i32, crafting_book_open: bool, crafting_book_filter: bool, smelting_book_open: bool, smelting_book_filter: bool, recipes: Vec<String>, recipes2: Vec<String>) -> ClientboundPacket {
@@ -2889,7 +2889,7 @@ pub struct RemoveEntityEffect {
 }
 
 impl RemoveEntityEffect {
-    const PACKET_ID: i32 = 54;
+    const PACKET_ID: i32 = 56;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::RemoveEntityEffect(RemoveEntityEffect {
@@ -2971,7 +2971,7 @@ pub struct Respawn {
 }
 
 impl Respawn {
-    const PACKET_ID: i32 = 56;
+    const PACKET_ID: i32 = 58;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::Respawn(Respawn {
@@ -3062,7 +3062,7 @@ pub struct SelectAdvancementTab {
 }
 
 impl SelectAdvancementTab {
-    const PACKET_ID: i32 = 58;
+    const PACKET_ID: i32 = 60;
 
 
     pub fn new_raw(identifier: Option<String>) -> ClientboundPacket {
@@ -3115,7 +3115,7 @@ pub struct Camera {
 }
 
 impl Camera {
-    const PACKET_ID: i32 = 60;
+    const PACKET_ID: i32 = 62;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::Camera(Camera {
@@ -3182,7 +3182,7 @@ pub struct DisplayScoreboard {
 }
 
 impl DisplayScoreboard {
-    const PACKET_ID: i32 = 62;
+    const PACKET_ID: i32 = 66;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::DisplayScoreboard(DisplayScoreboard {
@@ -3357,7 +3357,7 @@ pub struct EntityEquipment {
 }
 
 impl EntityEquipment {
-    const PACKET_ID: i32 = 66;
+    const PACKET_ID: i32 = 70;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::EntityEquipment(EntityEquipment {
@@ -3532,7 +3532,7 @@ pub struct SetPassengers {
 }
 
 impl SetPassengers {
-    const PACKET_ID: i32 = 70;
+    const PACKET_ID: i32 = 74;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::SetPassengers(SetPassengers {
@@ -3673,7 +3673,7 @@ pub struct TimeUpdate {
 }
 
 impl TimeUpdate {
-    const PACKET_ID: i32 = 74;
+    const PACKET_ID: i32 = 78;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::TimeUpdate(TimeUpdate {
@@ -3848,7 +3848,7 @@ pub struct PlayerListHeaderFooter {
 }
 
 impl PlayerListHeaderFooter {
-    const PACKET_ID: i32 = 78;
+    const PACKET_ID: i32 = 83;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::PlayerListHeaderFooter(PlayerListHeaderFooter {
@@ -4086,7 +4086,7 @@ pub struct EntityEffect {
 }
 
 impl EntityEffect {
-    const PACKET_ID: i32 = 83;
+    const PACKET_ID: i32 = 89;
     /// Deserializes a Read type into a packet. You usually won't need to use this.
     pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
         Ok(ClientboundPacket::EntityEffect(EntityEffect {
