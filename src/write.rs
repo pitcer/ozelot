@@ -1,9 +1,9 @@
 //! Functions for serializing  datatypes used by the protocol
-use errors::Result;
-
 use std::io::Write;
 
 use byteorder::{BigEndian, WriteBytesExt};
+
+use crate::errors::Result;
 
 /* While many of the functions here may seem redundant, keeping them is
  * convenient and consistent. */

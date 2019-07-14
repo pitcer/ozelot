@@ -1,5 +1,7 @@
+.idea/
 target/
 Cargo.lock
+*.iml
 *.swp
 **/*.rs.bk
 *.sh

@@ -1,21 +1,20 @@
-use ClientState;
-use errors::{Result, ResultExt};
-use read::read_varint;
-use write::write_varint;
-
+use std::{io, time};
 use std::io::{Cursor, Read, Write};
 use std::marker::PhantomData;
 use std::net::Shutdown;
 use std::net::TcpStream;
-use std::{io, time};
 
-use netbuf::Buf;
-
-use flate2::write::ZlibEncoder;
-use flate2::read::ZlibDecoder;
 use flate2::Compression;
-
+use flate2::read::ZlibDecoder;
+use flate2::write::ZlibEncoder;
+use netbuf::Buf;
 use openssl::symm;
+
+use crate::ClientState;
+use crate::errors::Result;
+use crate::errors::ResultExt;
+use crate::read::read_varint;
+use crate::write::write_varint;
 
 /// Trait for the two enums ClientboundPacket and ServerboundPacket
 pub trait Packet: Sized {
@@ -62,7 +61,7 @@ pub(crate) struct Connection<I: Packet, O: Packet> {
 impl<I: Packet, O: Packet> Connection<I, O> {
     pub(crate) fn from_tcpstream(stream: TcpStream) -> Result<Self> {
         let conn = Connection {
-            stream: stream,
+            stream,
             clientstate: ClientState::Handshake,
             buf: Buf::new(),
             packet_len: None,

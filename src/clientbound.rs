@@ -6,15 +6,14 @@
 //! The goal is also to add a bunch of useful helper functions to the packets,
 //! if you feel such a function is missing, open an issue.
 
-use connection::Packet;
-use errors::Result;
-use read::*;
-use write::*;
-use ClientState;
-
 use std::collections::BTreeMap;
 use std::fmt;
 use std::io::Read;
+
+use crate::{ClientState, Packet};
+use crate::errors::Result;
+use crate::read::{read_bool, read_bytearray_to_end, read_f32, read_f64, read_i16, read_i32, read_i64, read_i8, read_position, read_prefixed_bytearray, read_prefixed_varintarray, read_String, read_u128, read_u64, read_u8, read_uuid_str_dashes, read_varint};
+use crate::write::{write_bool, write_bytearray_to_end, write_f32, write_f64, write_i16, write_i32, write_i64, write_i8, write_position, write_prefixed_bytearray, write_prefixed_varintarray, write_String, write_u128, write_u64, write_u8, write_uuid_str_dashes, write_varint};
 
 /* See packets.clj for information about this include */
 include!("./.clientbound-enum.generated.rs");
@@ -128,8 +127,8 @@ impl MultiBlockChange {
             tmp.push((x, y, z, block_state));
         }
         Ok(ClientboundPacket::MultiBlockChange(MultiBlockChange {
-                                                   chunk_x: chunk_x,
-                                                   chunk_z: chunk_z,
+                                                   chunk_x,
+                                                   chunk_z,
                                                    changes: tmp,
                                                }))
     }
@@ -159,11 +158,11 @@ impl OpenWindow {
         };
 
         Ok(ClientboundPacket::OpenWindow(OpenWindow {
-                                             window_id: window_id,
-                                             window_type: window_type,
-                                             window_title: window_title,
-                                             number_of_slots: number_of_slots,
-                                             entity_id: entity_id,
+                                             window_id,
+                                             window_type,
+                                             window_title,
+                                             number_of_slots,
+                                             entity_id,
                                          }))
     }
 }
@@ -201,14 +200,14 @@ impl Explosion {
         let motion_y = read_f32(r)?;
         let motion_z = read_f32(r)?;
         Ok(ClientboundPacket::Explosion(Explosion {
-                                            x: x,
-                                            y: y,
-                                            z: z,
-                                            radius: radius,
+                                            x,
+                                            y,
+                                            z,
+                                            radius,
                                             affected_blocks: tmp,
-                                            motion_x: motion_x,
-                                            motion_y: motion_y,
-                                            motion_z: motion_z,
+                                            motion_x,
+                                            motion_y,
+                                            motion_z,
                                         }))
     }
 }
@@ -287,11 +286,10 @@ impl CombatEvent {
             _ => bail!("Invalid event in CombatEvent"),
         };
         Ok(ClientboundPacket::CombatEvent(CombatEvent {
-                                              event: event,
-                                              duration_playerid:
-                                                  duration_playerid,
-                                              entity_id: entity_id,
-                                              message: message,
+                                              event,
+                                              duration_playerid,
+                                              entity_id,
+                                              message,
                                           }))
     }
 }
@@ -318,11 +316,10 @@ impl ScoreboardObjective {
             _ => (None, None),
         };
         Ok(ClientboundPacket::ScoreboardObjective(ScoreboardObjective {
-                                                      name: name,
-                                                      mode: mode,
-                                                      value: value,
-                                                      objective_type:
-                                                          objective_type,
+                                                      name,
+                                                      mode,
+                                                      value,
+                                                      objective_type,
                                                   }))
     }
 }
@@ -348,10 +345,10 @@ impl UpdateScore {
             _ => None,
         };
         Ok(ClientboundPacket::UpdateScore(UpdateScore {
-                                              name: name,
-                                              action: action,
-                                              objective_name: objective_name,
-                                              value: value,
+                                              name,
+                                              action,
+                                              objective_name,
+                                              value,
                                           }))
     }
 }
@@ -381,9 +378,9 @@ impl Title {
             _ => None,
         };
         Ok(ClientboundPacket::Title(Title {
-                                        action: action,
-                                        text: text,
-                                        times: times,
+                                        action,
+                                        text,
+                                        times,
                                     }))
     }
 }

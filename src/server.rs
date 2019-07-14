@@ -1,11 +1,11 @@
-use ClientState;
-use clientbound::ClientboundPacket;
-use connection::Connection;
-use errors::Result;
-use serverbound::ServerboundPacket;
-
-use std::net::TcpStream;
 use std::borrow::Borrow;
+use std::net::TcpStream;
+
+use crate::clientbound::ClientboundPacket;
+use crate::ClientState;
+use crate::connection::Connection;
+use crate::errors::Result;
+use crate::serverbound::ServerboundPacket;
 
 /// Represents a single client connection, from the point of view of a server
 pub struct Server {

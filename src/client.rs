@@ -1,13 +1,13 @@
-use clientbound::ClientboundPacket;
-use connection::Connection;
-use errors::Result;
-use json::AuthenticationResponse;
-use serverbound::ServerboundPacket;
-use {ClientState, PROTOCOL_VERSION, mojang, serverbound, utils};
-
 use std::{thread, time};
-use std::net::TcpStream;
 use std::borrow::Borrow;
+use std::net::TcpStream;
+
+use crate::{ClientState, mojang, PROTOCOL_VERSION, serverbound, utils};
+use crate::clientbound::ClientboundPacket;
+use crate::connection::Connection;
+use crate::errors::Result;
+use crate::json::AuthenticationResponse;
+use crate::serverbound::ServerboundPacket;
 
 /// Represents a single client connection to a Server.
 pub struct Client {
@@ -121,7 +121,7 @@ impl Client {
     /// let auth = mojang::Authenticate::new("my_email@example.com".to_string(),
     ///                                      "my_password".to_string())
     ///     .perform().unwrap();
-    /// let mut client = Client::connect_authenticated("minecraft.example.com",
+    /// let client = Client::connect_authenticated("minecraft.example.com",
     /// 25565,
     /// &auth).unwrap();
     /// ```

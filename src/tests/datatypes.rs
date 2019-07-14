@@ -1,10 +1,11 @@
 //! Tests the serialization of the various datatypes, i.e. the files read.rs
 //! and write.rs
-use read::*;
-use write::*;
 
-use std::io::Cursor;
 use std::i32;
+use std::io::Cursor;
+
+use crate::read::{read_bool, read_f32, read_f64, read_i16, read_i32, read_i64, read_i8, read_position, read_String, read_u16, read_u64, read_u8, read_uuid_str, read_uuid_str_dashes, read_varint, read_varlong};
+use crate::write::{write_bool, write_f32, write_f64, write_i16, write_i32, write_i64, write_i8, write_position, write_String, write_u16, write_u64, write_u8, write_uuid_str, write_uuid_str_dashes, write_varint, write_varlong};
 
 /// Given a value, the same correctly encoded, and a reader and write function
 /// for that type of value, test that the reader and writer create values that

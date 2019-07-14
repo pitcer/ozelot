@@ -13,13 +13,12 @@
 //!
 //! Also contains some helper functions used for authentication.
 
-pub use json::*;
-use errors::Result;
-use utils;
-
 use curl::easy::{Easy, List};
-
 use serde_json;
+
+use crate::errors::Result;
+pub use crate::json::*;
+use crate::utils;
 
 /// Make a request to check the status of the Mojang APIs
 #[derive(Debug, Clone)]
@@ -78,8 +77,8 @@ impl NameToUUID {
     }
     pub fn new(username: String, at: Option<i64>) -> Self {
         NameToUUID {
-            username: username,
-            at: at,
+            username,
+            at,
         }
     }
 }
@@ -100,7 +99,7 @@ impl UUIDToHistory {
     }
     pub fn new(uuid: String) -> Self {
         UUIDToHistory {
-            uuid: uuid,
+            uuid,
         }
     }
 }
@@ -133,7 +132,7 @@ impl PlayernamesToUUIDs {
             panic!("PlayernamesToUUIDs got more than 100 usernames");
         }
         PlayernamesToUUIDs {
-            usernames: usernames,
+            usernames,
         }
     }
 }
@@ -160,8 +159,8 @@ impl UUIDToProfile {
     }
     pub fn new(uuid: String, signed: bool) -> Self {
         UUIDToProfile {
-            uuid: uuid,
-            signed: signed,
+            uuid,
+            signed,
         }
     }
 }
@@ -240,10 +239,10 @@ impl Statistics {
             panic!("You must specify at least one type of sale in the Statistics request");
         }
         Statistics {
-            item_sold_minecraft: item_sold_minecraft,
-            prepaid_card_redeemed_minecraft: prepaid_card_redeemed_minecraft,
-            item_sold_cobalt: item_sold_cobalt,
-            item_sold_scrolls: item_sold_scrolls,
+            item_sold_minecraft,
+            prepaid_card_redeemed_minecraft,
+            item_sold_cobalt,
+            item_sold_scrolls,
         }
     }
     /// Get the sum of everything
@@ -296,8 +295,8 @@ impl Authenticate {
     }
     pub fn new(username: String, password: String) -> Self {
         Authenticate {
-            username: username,
-            password: password,
+            username,
+            password,
             clientToken: None,
             requestUser: false,
         }
@@ -325,9 +324,9 @@ impl AuthenticateRefresh {
                requestUser: bool)
                -> Self {
         AuthenticateRefresh {
-            accessToken: accessToken,
-            clientToken: clientToken,
-            requestUser: requestUser,
+            accessToken,
+            clientToken,
+            requestUser,
         }
     }
 }
@@ -349,8 +348,8 @@ impl AuthenticateValidate {
     }
     pub fn new(accessToken: String, clientToken: Option<String>) -> Self {
         AuthenticateValidate {
-            accessToken: accessToken,
-            clientToken: clientToken,
+            accessToken,
+            clientToken,
         }
     }
 }
@@ -372,8 +371,8 @@ impl AuthenticateSignout {
     }
     pub fn new(username: String, password: String) -> Self {
         AuthenticateSignout {
-            username: username,
-            password: password,
+            username,
+            password,
         }
     }
 }
@@ -395,8 +394,8 @@ impl AuthenticateInvalidate {
     }
     pub fn new(accessToken: String, clientToken: String) -> Self {
         AuthenticateInvalidate {
-            accessToken: accessToken,
-            clientToken: clientToken,
+            accessToken,
+            clientToken,
         }
     }
 }
@@ -456,7 +455,7 @@ impl SessionHasJoined {
                -> Self {
         let hash = utils::post_sha1(server_id, shared_secret, public_key);
         SessionHasJoined {
-            username: username,
+            username,
             serverId: hash,
         }
     }

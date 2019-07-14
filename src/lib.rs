@@ -100,6 +100,8 @@
 
 extern crate byteorder;
 extern crate curl;
+#[macro_use]
+extern crate error_chain;
 extern crate flate2;
 extern crate netbuf;
 extern crate openssl;
@@ -107,8 +109,12 @@ extern crate openssl;
 extern crate serde_derive;
 #[macro_use]
 extern crate serde_json;
-#[macro_use]
-extern crate error_chain;
+
+use std::fmt;
+
+pub use client::Client;
+pub use connection::Packet;
+pub use server::Server;
 
 mod client;
 mod connection;
@@ -125,12 +131,6 @@ pub mod utils;
 pub mod write;
 #[cfg(test)]
 mod tests;
-
-pub use client::Client;
-pub use server::Server;
-pub use connection::Packet;
-
-use std::fmt;
 
 /// The protocol version supported by this version of ozelot
 pub const PROTOCOL_VERSION: i32 = 404;

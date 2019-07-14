@@ -3,17 +3,16 @@
 //! See the Serverbound sections on http://wiki.vg/Protocol for information
 //! about each of the packets.
 
-use connection::Packet;
-use errors::Result;
-use read::*;
-use write::*;
-use {ClientState, utils};
-
 use std::fmt;
 use std::io::Read;
 
-use openssl::rsa::Rsa;
 use openssl::pkey::Private;
+use openssl::rsa::Rsa;
+
+use crate::{ClientState, Packet, utils};
+use crate::errors::Result;
+use crate::read::{read_bool, read_bytearray, read_bytearray_to_end, read_f32, read_f64, read_i16, read_i64, read_i8, read_position, read_prefixed_bytearray, read_String, read_u128, read_u16, read_u64, read_u8, read_varint, read_varlong};
+use crate::write::{write_bool, write_bytearray, write_bytearray_to_end, write_f32, write_f64, write_i16, write_i64, write_i8, write_position, write_prefixed_bytearray, write_String, write_u128, write_u16, write_u64, write_u8, write_varint, write_varlong};
 
 /* See packets.clj for information about this include */
 include!("./.serverbound-enum.generated.rs");
@@ -119,10 +118,10 @@ impl UseEntity {
             None
         };
         Ok(ServerboundPacket::UseEntity(UseEntity {
-                                            target: target,
-                                            action: action,
-                                            location: location,
-                                            hand: hand,
+                                            target,
+                                            action,
+                                            location,
+                                            hand,
                                         }))
     }
 }
@@ -181,7 +180,7 @@ impl AdvancementTab {
             _ => bail!("Advancement Tab got invalid action {}", action),
         };
         Ok(ServerboundPacket::AdvancementTab(AdvancementTab {
-                                                 tab_id: tab_id,
+                                                 tab_id,
                                              }))
     }
 }

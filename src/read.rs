@@ -1,9 +1,10 @@
 //! Functions for deserializing datatypes used by the protocol
-use errors::{Result, ResultExt};
-
 use std::io::Read;
 
 use byteorder::{BigEndian, ReadBytesExt};
+
+use crate::errors::Result;
+use crate::errors::ResultExt;
 
 /// Read a single bool from the Reader
 pub fn read_bool<R: Read>(reader: &mut R) -> Result<bool> {

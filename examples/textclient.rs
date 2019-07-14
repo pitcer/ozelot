@@ -86,7 +86,7 @@ fn main() {
         }
 
         if let Ok(msg) = rx.try_recv() {
-            let msg = msg.trim_right().to_string();
+            let msg = msg.trim_end().to_string();
             let chat = serverbound::ChatMessage::new(msg);
             client.send(chat).unwrap();
         }

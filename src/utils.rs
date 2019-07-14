@@ -1,15 +1,15 @@
 //! Miscellaneous utility functions
 
-use errors::{Result, ResultExt};
-
 use std::fmt::Write;
 
 use openssl::hash::{self, MessageDigest};
+use openssl::pkey::Private;
 use openssl::rand;
 use openssl::rsa::{Padding, Rsa};
-use openssl::pkey::Private;
-
 use serde_json::{self, Value};
+
+use crate::errors::Result;
+use crate::errors::ResultExt;
 
 const PADDING: Padding = Padding::PKCS1;
 
