@@ -98,13 +98,8 @@
         unreachable_pub,
         )]
 
-extern crate byteorder;
-extern crate curl;
 #[macro_use]
 extern crate error_chain;
-extern crate flate2;
-extern crate netbuf;
-extern crate openssl;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
