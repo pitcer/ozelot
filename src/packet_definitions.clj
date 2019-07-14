@@ -489,6 +489,16 @@
           {:name "particle_data" :type "f32" :getter "Get the particle data for each particle"}
           {:name "count" :type "i32" :getter "Get the amount of particles to create"}
           {:name "data" :type "Vec<u8>" :read "bytearray_to_end" :getter "Get the particle data"}]}
+{:name "UpdateLight"
+ :id 36
+ :fields [{:name "chunk_x" :type "i32" :getter "Get the chunk X coordinate (block coordinate divided by 16, rounded down)" :read "varint"}
+          {:name "chunk_z" :type "i32" :getter "Get the chunk Z coordinate (block coordinate divided by 16, rounded down)" :read "varint"}
+          {:name "sky_light_mask" :type "i32" :getter "Get the sky light mask" :read "varint"}
+          {:name "block_light_mask" :type "i32" :getter "Get the block light mask" :read "varint"}
+          {:name "empty_sky_light_mask" :type "i32" :getter "Get the empty sky light mask" :read "varint"}
+          {:name "empty_block_light_mask" :type "i32" :getter "Get the empty block light mask" :read "varint"}
+          {:name "sky_light_arrays" :type "Vec<u8>" :getter "Get the raw data for this packet. This library does not attempt to parse the packet" :read "bytearray_to_end"}
+          {:name "block_light_arrays" :type "Vec<u8>" :getter "Get the raw data for this packet. This library does not attempt to parse the packet" :read "bytearray_to_end"}]}
 {:name "JoinGame"
  :id 37
  :fields [{:name "entity_id" :type "i32" :getter "Get the player's entity ID"}

@@ -2060,6 +2060,88 @@ impl Particle {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct UpdateLight {
+    chunk_x: i32,
+    chunk_z: i32,
+    sky_light_mask: i32,
+    block_light_mask: i32,
+    empty_sky_light_mask: i32,
+    empty_block_light_mask: i32,
+    sky_light_arrays: Vec<u8>,
+    block_light_arrays: Vec<u8>,
+}
+
+impl UpdateLight {
+    const PACKET_ID: i32 = 36;
+    /// Deserializes a Read type into a packet. You usually won't need to use this.
+    pub fn deserialize<R: Read>(r: &mut R) -> Result<ClientboundPacket> {
+        Ok(ClientboundPacket::UpdateLight(UpdateLight {
+            chunk_x: read_varint(r)?,
+            chunk_z: read_varint(r)?,
+            sky_light_mask: read_varint(r)?,
+            block_light_mask: read_varint(r)?,
+            empty_sky_light_mask: read_varint(r)?,
+            empty_block_light_mask: read_varint(r)?,
+            sky_light_arrays: read_bytearray_to_end(r)?,
+            block_light_arrays: read_bytearray_to_end(r)?,
+
+        }))
+    }
+    /// Serializes the packet into Vec<u8>. You usually won't need to use this.
+    pub fn to_u8(&self) -> Result<Vec<u8>> {
+        let mut ret = Vec::new();
+        write_varint(&Self::PACKET_ID, &mut ret)?;
+        write_varint(&self.chunk_x, &mut ret)?;
+        write_varint(&self.chunk_z, &mut ret)?;
+        write_varint(&self.sky_light_mask, &mut ret)?;
+        write_varint(&self.block_light_mask, &mut ret)?;
+        write_varint(&self.empty_sky_light_mask, &mut ret)?;
+        write_varint(&self.empty_block_light_mask, &mut ret)?;
+        write_bytearray_to_end(&self.sky_light_arrays, &mut ret)?;
+        write_bytearray_to_end(&self.block_light_arrays, &mut ret)?;
+
+        Ok(ret)
+    }
+    pub fn new(chunk_x: i32, chunk_z: i32, sky_light_mask: i32, block_light_mask: i32, empty_sky_light_mask: i32, empty_block_light_mask: i32, sky_light_arrays: Vec<u8>, block_light_arrays: Vec<u8>) -> ClientboundPacket {
+        ClientboundPacket::UpdateLight(UpdateLight {
+            chunk_x: chunk_x,
+            chunk_z: chunk_z,
+            sky_light_mask: sky_light_mask,
+            block_light_mask: block_light_mask,
+            empty_sky_light_mask: empty_sky_light_mask,
+            empty_block_light_mask: empty_block_light_mask,
+            sky_light_arrays: sky_light_arrays,
+            block_light_arrays: block_light_arrays,
+        })
+    }
+    /// Get the chunk X coordinate (block coordinate divided by 16, rounded down)
+    pub fn get_chunk_x(&self) -> &i32 {
+        &self.chunk_x
+    }    /// Get the chunk Z coordinate (block coordinate divided by 16, rounded down)
+    pub fn get_chunk_z(&self) -> &i32 {
+        &self.chunk_z
+    }    /// Get the sky light mask
+    pub fn get_sky_light_mask(&self) -> &i32 {
+        &self.sky_light_mask
+    }    /// Get the block light mask
+    pub fn get_block_light_mask(&self) -> &i32 {
+        &self.block_light_mask
+    }    /// Get the empty sky light mask
+    pub fn get_empty_sky_light_mask(&self) -> &i32 {
+        &self.empty_sky_light_mask
+    }    /// Get the empty block light mask
+    pub fn get_empty_block_light_mask(&self) -> &i32 {
+        &self.empty_block_light_mask
+    }    /// Get the raw data for this packet. This library does not attempt to parse the packet
+    pub fn get_sky_light_arrays(&self) -> &Vec<u8> {
+        &self.sky_light_arrays
+    }    /// Get the raw data for this packet. This library does not attempt to parse the packet
+    pub fn get_block_light_arrays(&self) -> &Vec<u8> {
+        &self.block_light_arrays
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct JoinGame {
     entity_id: i32,
     gamemode: u8,
